@@ -7,9 +7,6 @@ class Book extends Component {
     render() {
         const { title, authors, coverImageURL } = this.props.spec;
 
-        console.log( "check URL" );
-        console.log( coverImageURL );
-
         return (
             <div className="book">
                 <div className="book-top">
