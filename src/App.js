@@ -17,10 +17,35 @@ class BooksApp extends React.Component {
      * a good URL they can bookmark and share.
      */
     showSearchPage: false,
-    books: [].concat( (new BookList()).listOfBooks )
+
+    books: (new BookList()).listOfBooks,
+
+    nowBooks: (new BookList()).listOfNowBooks,
+    pastBooks: (new BookList()).listOfPastBooks,
+    futureBooks: (new BookList()).listOfFutureBooks
   }
 
   render() {
+
+    const present = this.state.nowBooks;
+    const past = this.state.pastBooks;
+    const future = this.state.futureBooks;
+
+    console.log( "Now" );
+    console.log ( present[0].title );
+    console.log ( present[1].title );
+
+    console.log( "Future" );
+    console.log ( future[0].title );
+    console.log ( future[1].title );
+
+    console.log( "Past" );
+    console.log ( past[0].title );
+    console.log ( past[1].title );
+    console.log ( past[2].title );
+
+    //console.log( this.nowBooks[0].title );
+    //console.log( this.nowBooks[1].title );
 
     return (
       <div className="app">

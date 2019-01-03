@@ -1,8 +1,10 @@
 
 import BookSpecification from './BookSpecification';
-//var BookSpecification = require( './BookSpecification.js' );
+import When from './When.js';
 
 class BookList {
+    scheduling = (new When()).when;
+
     constructor() {
         this._listOfBooks = [];
 
@@ -22,9 +24,10 @@ class BookList {
         let coverImageURL = urlComponents.join( "" );
         let title = "To Kill a Mockingbird";
         let authors = ["Harper Lee"];
+        let when = this.scheduling.now;
 
         let bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
@@ -44,9 +47,10 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "Ender's Game";
         authors = ["Orson Scott Card"];
+        when = this.scheduling.now;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
@@ -65,9 +69,10 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "1776";
         authors = ["David McCullough"];
+        when = this.scheduling.future;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
@@ -86,9 +91,10 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "Harry Potter and the Sorcerer's Stone";
         authors = ["J.K. Rowling"];
+        when = this.scheduling.future;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
@@ -108,9 +114,10 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "The Hobbit";
         authors = ["J.R.R. Tolkien"];
+        when = this.scheduling.past;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
@@ -130,9 +137,10 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "Oh, the Places You'll Go!";
         authors = ["Seuss"];
+        when = this.scheduling.past;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
@@ -152,16 +160,32 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "The Adventures of Tom Sawyer";
         authors = ["Mark Twain"];
+        when = this.scheduling.past;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors );
+            coverImageURL, title, authors, when );
 
         this._listOfBooks.push( bookSpecification );
 
     } // constructor()
 
     get listOfBooks() { return this._listOfBooks; }
+
+    get listOfNowBooks() {
+        return this._listOfBooks.filter( (book) =>
+            (book.when.code === this.scheduling.now.code) );
+    }
+
+    get listOfPastBooks() {
+        return this._listOfBooks.filter( (book) =>
+            (book.when.code === this.scheduling.past.code) );
+    }
+
+    get listOfFutureBooks() {
+        return this._listOfBooks.filter( (book) =>
+            (book.when.code === this.scheduling.future.code) );
+    }
+
 } // BookList
 
 export default BookList
-//module.exports = BookList;
