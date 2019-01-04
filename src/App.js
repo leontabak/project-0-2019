@@ -2,10 +2,10 @@
 import React from 'react';
 // import * as BooksAPI from './BooksAPI'
 import './App.css';
-import BookShelfChanger from './BookShelfChanger';
 import BookSpecification from './BookSpecification';
 import BookList from './BookList';
-import Book from './Book';
+import When from './When';
+import BookCase from './BookCase';
 
 class BooksApp extends React.Component {
   state = {
@@ -16,36 +16,14 @@ class BooksApp extends React.Component {
      * forward buttons to navigate between pages, as well as provide 
      * a good URL they can bookmark and share.
      */
-    showSearchPage: false,
+    showSearchPage: true,
 
-    books: (new BookList()).listOfBooks,
+    books: new BookList(),
 
-    nowBooks: (new BookList()).listOfNowBooks,
-    pastBooks: (new BookList()).listOfPastBooks,
-    futureBooks: (new BookList()).listOfFutureBooks
+    scheduling: (new When()).when
   }
 
   render() {
-
-    const present = this.state.nowBooks;
-    const past = this.state.pastBooks;
-    const future = this.state.futureBooks;
-
-    console.log( "Now" );
-    console.log ( present[0].title );
-    console.log ( present[1].title );
-
-    console.log( "Future" );
-    console.log ( future[0].title );
-    console.log ( future[1].title );
-
-    console.log( "Past" );
-    console.log ( past[0].title );
-    console.log ( past[1].title );
-    console.log ( past[2].title );
-
-    //console.log( this.nowBooks[0].title );
-    //console.log( this.nowBooks[1].title );
 
     return (
       <div className="app">
@@ -81,60 +59,7 @@ class BooksApp extends React.Component {
             </div>
           </div>
         ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-                        <Book spec={this.state.books[0]} />
-                      </li>
-                      <li>
-                        <Book spec={this.state.books[1]} />
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-                        <Book spec={this.state.books[2]} />
-                      </li>
-                      <li>
-                        <Book spec={this.state.books[3]} />
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      <li>
-                        <Book spec={this.state.books[4]} />
-                      </li>
-                      <li>
-                        <Book spec={this.state.books[5]} />
-                      </li>
-                      <li>
-                        <Book spec={this.state.books[6]} />
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
-            </div>
-          </div>
+          <BookCase books={this.state.books} />
         )}
       </div>
     )
