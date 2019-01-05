@@ -6,6 +6,7 @@ import BookList from './BookList';
 import When from './When';
 import BookCase from './BookCase';
 import SearchBooks from './SearchBooks';
+import { Route } from 'react-router-dom';
 
 class BooksApp extends React.Component {
   state = {
@@ -16,7 +17,6 @@ class BooksApp extends React.Component {
      * forward buttons to navigate between pages, as well as provide 
      * a good URL they can bookmark and share.
      */
-    showSearchPage: false,
 
     books: new BookList(),
 
@@ -29,13 +29,17 @@ class BooksApp extends React.Component {
   render() {
 
     return (
-      <div className="app">
-        {this.state.showSearchPage ? (
-          <SearchBooks showBookCase={this.showBookCase} />
-        ) : (
-          <BookCase books={this.state.books} showSearchBooks={this.showSearchBooks} />
-        )}
-      </div>
+
+        <div className="app">
+            <Route exact path="/"
+                render={() => (
+                  <BookCase books={this.state.books}/>)} />
+            <Route path="/search"
+                render={() => (
+                  <SearchBooks />
+                )} />
+        </div>
+
     )
   }
 }

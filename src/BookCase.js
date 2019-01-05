@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import BookShelf from './BookShelf';
 import When from './When';
+import { Link } from 'react-router-dom';
 
 class BookCase extends Component {
 
@@ -25,11 +26,7 @@ class BookCase extends Component {
                     <BookShelf books={past} when={scheduling.past} />
                 </div>
             </div>
-            <div className="open-search">
-                <button onClick={this.props.showSearchBooks}>
-                    Add a book
-                </button>
-            </div>
+            <Link to='/search' className='open-search'>Add a book</Link>
          </div>
     )} // return
 } // BookCase
