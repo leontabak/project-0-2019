@@ -1,14 +1,12 @@
 
 import React, { Component } from 'react';
 import Book from './Book';
-import When from './When';
 
 class BookShelf extends Component {
 
   render() {
       const books = this.props.books;
       const when = this.props.when;
-      const scheduling = (new When()).when;
 
       return (
           <div className="bookshelf">
@@ -16,7 +14,7 @@ class BookShelf extends Component {
               <div className="bookshelf-books">
                   <ol className="books-grid">
                       {books.map( (book) => (
-                          <li>
+                          <li key={book.index}>
                               <Book spec={book} />
                           </li>
                       ))}

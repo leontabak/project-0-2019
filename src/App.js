@@ -2,7 +2,6 @@
 import React from 'react';
 // import * as BooksAPI from './BooksAPI'
 import './App.css';
-import BookSpecification from './BookSpecification';
 import BookList from './BookList';
 import When from './When';
 import BookCase from './BookCase';

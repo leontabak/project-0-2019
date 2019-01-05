@@ -8,7 +8,7 @@ class SearchBooks extends Component {
             <div className="search-books-bar">
               <button 
                     className="close-search" 
-                    onClick={() => this.setState({ showSearchPage: false })}>
+                    onClick={this.props.showBookCase}>
                   Close
               </button>
               <div className="search-books-input-wrapper">

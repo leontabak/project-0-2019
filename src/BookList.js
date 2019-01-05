@@ -7,7 +7,32 @@ class BookList {
 
     constructor() {
         this._listOfBooks = [];
+        this.initialize();
+    } // constructor()
 
+    get listOfBooks() { return this._listOfBooks; }
+
+    get listOfNowBooks() {
+        return this._listOfBooks.filter( (book) =>
+            (book.when.code === this.scheduling.now.code) );
+    }
+
+    get listOfPastBooks() {
+        return this._listOfBooks.filter( (book) =>
+            (book.when.code === this.scheduling.past.code) );
+    }
+
+    get listOfFutureBooks() {
+        return this._listOfBooks.filter( (book) =>
+            (book.when.code === this.scheduling.future.code) );
+    }
+
+    addBook( bookSpecification ) {
+        bookSpecification.index = this._listOfBooks.length;
+        this._listOfBooks.push( bookSpecification );
+    } // addBook()
+
+    initialize() {
         /* book #0 */
         let urlComponents = [];
         urlComponents.push( "http://books.google.com/books/content" );
@@ -29,7 +54,7 @@ class BookList {
         let bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
+        this.addBook( bookSpecification );
 
         /* book #1 */
         urlComponents = [];
@@ -52,7 +77,7 @@ class BookList {
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
+        this.addBook( bookSpecification );
 
         /* book #2 */
         urlComponents = [];
@@ -74,7 +99,7 @@ class BookList {
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
+        this.addBook( bookSpecification );
 
         /* book #3 */
         urlComponents = [];
@@ -96,7 +121,7 @@ class BookList {
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
+        this.addBook( bookSpecification );
 
         /* book #4 */
         urlComponents = []; 
@@ -119,7 +144,7 @@ class BookList {
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
+        this.addBook( bookSpecification );
 
         /* book #5 */
         urlComponents = [];
@@ -142,7 +167,7 @@ class BookList {
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
+        this.addBook( bookSpecification );
 
         /* book #6 */
         urlComponents = []; 
@@ -165,27 +190,8 @@ class BookList {
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
-        this._listOfBooks.push( bookSpecification );
-
-    } // constructor()
-
-    get listOfBooks() { return this._listOfBooks; }
-
-    get listOfNowBooks() {
-        return this._listOfBooks.filter( (book) =>
-            (book.when.code === this.scheduling.now.code) );
-    }
-
-    get listOfPastBooks() {
-        return this._listOfBooks.filter( (book) =>
-            (book.when.code === this.scheduling.past.code) );
-    }
-
-    get listOfFutureBooks() {
-        return this._listOfBooks.filter( (book) =>
-            (book.when.code === this.scheduling.future.code) );
-    }
-
+        this.addBook( bookSpecification );
+    } // initialize()
 } // BookList
 
 export default BookList

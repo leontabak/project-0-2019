@@ -26,7 +26,7 @@ class BookCase extends Component {
                 </div>
             </div>
             <div className="open-search">
-                <button onClick={() => this.setState({ showSearchPage: true })}>
+                <button onClick={this.props.showSearchBooks}>
                     Add a book
                 </button>
             </div>
