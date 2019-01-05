@@ -26,7 +26,9 @@ class BookCase extends Component {
                     <BookShelf books={past} when={scheduling.past} />
                 </div>
             </div>
-            <Link to='/search' className='open-search'>Add a book</Link>
+            <div className="open-search">
+                <Link to='/search' className='open-search-link'>Add a book</Link>
+            </div>
          </div>
     )} // return
 } // BookCase
