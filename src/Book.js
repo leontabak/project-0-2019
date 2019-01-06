@@ -5,7 +5,8 @@ import BookShelfChanger from './BookShelfChanger';
 class Book extends Component {
 
     render() {
-        const { title, authors, coverImageURL, when } = this.props.spec;
+        const { id, title, authors, coverImageURL, when } = this.props.spec;
+        const moveBook = this.props.moveBook;
 
         return (
             <div className="book">
@@ -18,7 +19,7 @@ class Book extends Component {
                             backgroundImage: `url(${coverImageURL})`}}>
                     </div>
 
-                    <BookShelfChanger when={when}/>
+                    <BookShelfChanger id={id} when={when} moveBook={moveBook} />
 
                 </div>
                 <div className="book-title">

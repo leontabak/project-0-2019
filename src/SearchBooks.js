@@ -1,8 +1,21 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
 
 class SearchBooks extends Component {
+    state = {
+        query: ''
+    }; // state
+
+    search = (event) => {
+        const term = "" + event.target.value;
+        if( term.length > 0 ) {
+        BooksAPI.search( term ).then(
+            (bookSet) => { bookSet.forEach((book) => {console.log(book.title)})} );
+        } // if
+    };
+
     render() {
         return (
           <div className="search-books">
@@ -24,13 +37,16 @@ class SearchBooks extends Component {
                   search is limited by search terms.
                 */}
                 <input
-                      type="text" 
+                      type="text"
+                      value={this.query}
+                      onChange={this.search} 
                       placeholder="Search by title or author"/>
 
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+              </ol>
             </div>
           </div>
 

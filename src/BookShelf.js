@@ -7,6 +7,7 @@ class BookShelf extends Component {
   render() {
       const books = this.props.books;
       const when = this.props.when;
+      const moveBook = this.props.moveBook;
 
       return (
           <div className="bookshelf">
@@ -14,8 +15,8 @@ class BookShelf extends Component {
               <div className="bookshelf-books">
                   <ol className="books-grid">
                       {books.map( (book) => (
-                          <li key={book.index}>
-                              <Book spec={book} />
+                          <li key={book.id}>
+                              <Book spec={book} moveBook={moveBook} />
                           </li>
                       ))}
                   </ol>

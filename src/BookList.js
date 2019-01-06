@@ -1,35 +1,50 @@
 
 import BookSpecification from './BookSpecification';
 import When from './When.js';
+import * as BooksAPI from './BooksAPI';
 
 class BookList {
-    scheduling = (new When()).when;
+    when = (new When());
+    choices = this.when.choices;
 
     constructor() {
         this._listOfBooks = [];
-        this.initialize();
+        //this.initialize();
+        //this.readFromDB();
     } // constructor()
 
     get listOfBooks() { return this._listOfBooks; }
 
     get listOfNowBooks() {
         return this._listOfBooks.filter( (book) =>
-            (book.when.code === this.scheduling.now.code) );
+            (book.when.code === this.choices.now.code) );
     }
 
     get listOfPastBooks() {
         return this._listOfBooks.filter( (book) =>
-            (book.when.code === this.scheduling.past.code) );
+            (book.when.code === this.choices.past.code) );
     }
 
     get listOfFutureBooks() {
         return this._listOfBooks.filter( (book) =>
-            (book.when.code === this.scheduling.future.code) );
+            (book.when.code === this.choices.future.code) );
     }
 
+    clear() {
+        this._listOfBooks.splice( 0, this._listOfBooks.length );
+    } // clear()
+
     addBook( bookSpecification ) {
-        bookSpecification.index = this._listOfBooks.length;
+        bookSpecification.id = this._listOfBooks.length;
+
+        //console.log( "adding " + bookSpecification.title );
+        //console.log( bookSpecification.authors );
+        //console.log( bookSpecification.when.label );
+        //console.log( bookSpecification.id );
+
+        //console.log( "length before adding: " + this._listOfBooks.length );
         this._listOfBooks.push( bookSpecification );
+        //console.log( "length after adding: " + this._listOfBooks.length );
     } // addBook()
 
     initialize() {
@@ -49,7 +64,7 @@ class BookList {
         let coverImageURL = urlComponents.join( "" );
         let title = "To Kill a Mockingbird";
         let authors = ["Harper Lee"];
-        let when = this.scheduling.now;
+        let when = this.choices.now;
 
         let bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
@@ -72,7 +87,7 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "Ender's Game";
         authors = ["Orson Scott Card"];
-        when = this.scheduling.now;
+        when = this.choices.now;
 
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
@@ -94,7 +109,7 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "1776";
         authors = ["David McCullough"];
-        when = this.scheduling.future;
+        when = this.choices.future;
 
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
@@ -116,7 +131,7 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "Harry Potter and the Sorcerer's Stone";
         authors = ["J.K. Rowling"];
-        when = this.scheduling.future;
+        when = this.choices.future;
 
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
@@ -139,7 +154,7 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "The Hobbit";
         authors = ["J.R.R. Tolkien"];
-        when = this.scheduling.past;
+        when = this.choices.past;
 
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
@@ -162,7 +177,7 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "Oh, the Places You'll Go!";
         authors = ["Seuss"];
-        when = this.scheduling.past;
+        when = this.choices.past;
 
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
@@ -185,13 +200,37 @@ class BookList {
         coverImageURL = urlComponents.join( "" );
         title = "The Adventures of Tom Sawyer";
         authors = ["Mark Twain"];
-        when = this.scheduling.past;
+        when = this.choices.past;
 
         bookSpecification = new BookSpecification(
             coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
     } // initialize()
+
+    readFromDB() {
+        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach( 
+            (bookSpec) => {
+                const title = bookSpec.title;
+                const authors = bookSpec.authors;
+                const coverImageURL = bookSpec.imageLinks.smallThumbnail;
+                const when = this.when.labelToObject( bookSpec.shelf );
+
+                const spec = new BookSpecification( coverImageURL, title, authors, when );
+
+                this.addBook( spec );
+            }
+        );});
+    } // readFromDB()
+
+    writeToDB() {
+        this.listOfBooks.forEach( 
+            (bookSpec) => {
+                console.log( bookSpec.title ); 
+                BooksAPI.update( bookSpec, bookSpec.when.label ).then( () => {console.log("posted");});
+            } );
+    } // writeToDB()
+
 } // BookList
 
 export default BookList
