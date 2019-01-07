@@ -4,45 +4,55 @@ import './App.css';
 import BookList from './BookList';
 import When from './When';
 import BookCase from './BookCase';
+import BookSpecification from './BookSpecification';
 import SearchBooks from './SearchBooks';
 import { Route } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
 
 class BooksApp extends React.Component {
-  state = {
-    books: new BookList()
-    //when: (new When()).when
-  };
+    state = {
+        books: []
+    };
 
-/*
-  constructor() {
-    super();
-    this.state.books.initialize();
-    console.log( "after initializing: " + this.state.books.listOfBooks.length );
-    //this.state.books.writeToDB();
-    this.state.books.readFromDB();
-    console.log( "after reading DB: " + this.state.books.listOfBooks.length );
-  } // constructor()
-*/
+    when = new When();
 
-  componentDidMount() {
-      this.state.books.initialize();
-  } // componentDidMount()
+    componentDidMount() {
+        //const allBooks = new BookList();
+        //allBooks.initialize();
+        //allBooks.listOfBooks.forEach( (book) => {this.addBook( book );});
+        this.readFromDB();
+    } // componentDidMount()
 
-/*
+    readFromDB() {
+        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach( 
+            (bookSpec) => {
+                const title = bookSpec.title;
+                const authors = bookSpec.authors;
+                const coverImageURL = bookSpec.imageLinks.smallThumbnail;
+                const when = this.when.labelToObject( bookSpec.shelf );
+
+                const spec = new BookSpecification( coverImageURL, title, authors, when );
+
+                this.addBook( spec );
+            }
+        );});
+    } // readFromDB()
+
   addBook = (bookSpecification) => {
       this.setState( (previousState) => {
-          bookSpecification.id = this.listOfBooks.length;
-          return {books: [...books bookSpecification]};
+          bookSpecification.id = previousState.books.length;
+          return {books: [...previousState.books, bookSpecification]};
       });
-  }; addBook()
-*/
+  }; // addBook()
+
 
   moveBook = (id, destination) => {
       this.setState( (previousState) => {
-          previousState.books._listOfBooks[id].when = destination;
+          previousState.books[id].when = destination;
           return {books: previousState.books};
       } );
   }; // moveBook()
+
 
   render() {
 

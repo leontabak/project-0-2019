@@ -7,20 +7,41 @@ import * as BooksAPI from './BooksAPI';
 
 class BookCase extends Component {
 
-    
+/*    
     constructor( props ) {
         super( props );
         const when = (new When()).when;
         //BooksAPI.getAll().then( (bookSet) => {console.log(bookSet)} );
     } // constructor()
+*/
 
+    choices = (new When()).choices;
+
+    listOfNowBooks( allBooks ) {
+        const choices = this.choices;
+        return allBooks.filter( (book) =>
+            (book.when.code === this.choices.now.code) );
+    } // listOfNowBooks()
+
+    listOfPastBooks( allBooks ) {
+        const choices = this.choices;
+        return allBooks.filter( (book) =>
+            (book.when.code === this.choices.past.code) );
+    } // listOfPastBooks()
+
+    listOfFutureBooks( allBooks ) {
+        const choices = this.choices;
+        return allBooks.filter( (book) =>
+            (book.when.code === this.choices.future.code) );
+    } // listOfFutureBooks()
 
     render() {
 
-        const present = this.props.books.listOfNowBooks;
-        const past = this.props.books.listOfPastBooks;
-        const future = this.props.books.listOfFutureBooks;
-        const choices = (new When()).choices;
+        const allBooks = this.props.books;
+        const present = this.listOfNowBooks( allBooks );
+        const past = this.listOfPastBooks( allBooks );
+        const future = this.listOfFutureBooks( allBooks );
+        const choices = this.choices;
 
         return ( 
         <div className="list-books">

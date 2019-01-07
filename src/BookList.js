@@ -4,14 +4,17 @@ import When from './When.js';
 import * as BooksAPI from './BooksAPI';
 
 class BookList {
+    _listOfBooks = [];
+
     when = (new When());
     choices = this.when.choices;
 
+/*
     constructor() {
-        this._listOfBooks = [];
-        //this.initialize();
+        this.initialize();
         //this.readFromDB();
     } // constructor()
+*/
 
     get listOfBooks() { return this._listOfBooks; }
 
