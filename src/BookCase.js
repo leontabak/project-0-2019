@@ -3,36 +3,27 @@ import React, { Component } from 'react';
 import BookShelf from './BookShelf';
 import When from './When';
 import { Link } from 'react-router-dom';
-import * as BooksAPI from './BooksAPI';
 
 class BookCase extends Component {
-
-/*    
-    constructor( props ) {
-        super( props );
-        const when = (new When()).when;
-        //BooksAPI.getAll().then( (bookSet) => {console.log(bookSet)} );
-    } // constructor()
-*/
 
     choices = (new When()).choices;
 
     listOfNowBooks( allBooks ) {
         const choices = this.choices;
         return allBooks.filter( (book) =>
-            (book.when.code === this.choices.now.code) );
+            (book.when.code === choices.now.code) );
     } // listOfNowBooks()
 
     listOfPastBooks( allBooks ) {
         const choices = this.choices;
         return allBooks.filter( (book) =>
-            (book.when.code === this.choices.past.code) );
+            (book.when.code === choices.past.code) );
     } // listOfPastBooks()
 
     listOfFutureBooks( allBooks ) {
         const choices = this.choices;
         return allBooks.filter( (book) =>
-            (book.when.code === this.choices.future.code) );
+            (book.when.code === choices.future.code) );
     } // listOfFutureBooks()
 
     render() {
@@ -48,6 +39,7 @@ class BookCase extends Component {
             <div className="list-books-title">
                 <h1>MyReads</h1>
             </div>
+
             <div className="list-books-content">
                 <div>
                     <BookShelf
@@ -64,11 +56,14 @@ class BookCase extends Component {
                         moveBook={this.props.moveBook}/>
                 </div>
             </div>
+
+            {/*<div className="open-search">*/}
             <div className="open-search">
                 <Link to='/search' className='open-search-link'>Add a book</Link>
             </div>
-         </div>
-    )} // return
+
+        </div>
+    )} // render()
 } // BookCase
 
 export default BookCase

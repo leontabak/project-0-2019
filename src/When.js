@@ -2,11 +2,30 @@
 class When {
 
     constructor() {
-        this._past = {code: 0, label: "Read"};
-        this._now = {code: 1, label: "Currently Reading"};
-        this._future = {code: 2, label: "Want to Read"};
-        this._never = {code: 3, label: "None"};
-        this._possible = {code: 4, label: "Considering"};
+        this._past = {
+            code: 0,
+            label: "Read",
+            shelfName: "read"};
+
+        this._now = {
+            code: 1, 
+            label: "Currently Reading",
+            shelfName: "currentlyReading"};
+
+        this._future = {
+            code: 2,
+            label: "Want to Read",
+            shelfName: "wantToRead"};
+
+        this._never = {
+            code: 3,
+            label: "None",
+            shelfName: "none"};
+
+        this._possible = {
+            code: 3,
+            label: "Considering",
+            shelfName: "considering"};
     } // constructor()
 
     labelToObject( label ) {
@@ -30,6 +49,21 @@ class When {
             return this._never;
         } // else
     } // labelToObject()
+
+    shelfNameToObject( shelfName ) {
+        if( shelfName === this._past.shelfName ) {
+            return this._past;
+        } // if
+        else if( shelfName === this._now.shelfName ) {
+            return this._now;
+        } // else if
+        else if( shelfName === this._future.shelfName ) {
+            return this._future;
+        } // else if
+        else {
+            return this._never;
+        } // else
+    } // shelfNameToObject()
 
     get past() { return this._past; }
     get now() { return this._now; }

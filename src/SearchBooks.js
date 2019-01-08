@@ -30,17 +30,16 @@ class SearchBooks extends Component {
             bookSet.forEach(
                 (book) => {
                     const spec = this.makeBookSpecification(book);
-                    spec.id = this.results.length;
-                    //console.log( spec.title );
+                    spec.index = this.results.length;
                     this.results.push( spec );
                 } // body of arrow function
             ); // forEach
             this.setState( {selectedBooks: this.results} );
-            //this.results.forEach( (b) => {console.log(b.title)} );
         } // if
     } // createResultList()
 
     makeBookSpecification( dbRecord ) {
+        const id = dbRecord.id;
         const title = dbRecord.title;
 
         let authors = dbRecord.authors;
@@ -58,12 +57,31 @@ class SearchBooks extends Component {
 
         const when = this.when.possible;
 
-        //console.log( title );
-
-        const spec = new BookSpecification( coverImageURL, title, authors, when );
+        const spec = new BookSpecification( id, coverImageURL, title, authors, when );
 
         return spec;
     } // makeSpecification()
+
+    moveBook(index, destination) {
+        const id = this.results[index].id;
+        const title = this.results[index].title;
+        const authors = this.results[index].authors;
+        const coverImageURL = this.results[index].coverImageURL;
+        const when = this.results[index].when;
+
+        const dbRecord = {
+            id: id,
+            index: index,
+            title: title,
+            authors: authors,
+            imageLinks: {smallThumbnail: coverImageURL},
+            when: when
+        };
+
+        const shelf = destination.shelfName;
+
+        BooksAPI.update( dbRecord, shelf ).then( (msg) => console.log(msg) );
+    } // moveBook()
 
     render() {
         return (
@@ -93,7 +111,7 @@ class SearchBooks extends Component {
 
               </div>
             </div>
-            <SearchResults books={this.state.selectedBooks} />
+            <SearchResults books={this.state.selectedBooks} moveBook={this.moveBook.bind(this)}/>
           </div>
         ); // return
     } // render()

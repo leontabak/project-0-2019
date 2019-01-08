@@ -1,7 +1,6 @@
 
 import React from 'react';
 import './App.css';
-import BookList from './BookList';
 import When from './When';
 import BookCase from './BookCase';
 import BookSpecification from './BookSpecification';
@@ -20,18 +19,25 @@ class BooksApp extends React.Component {
         //const allBooks = new BookList();
         //allBooks.initialize();
         //allBooks.listOfBooks.forEach( (book) => {this.addBook( book );});
+        console.log( "componentDidMount()" );
         this.readFromDB();
     } // componentDidMount()
+
+//    componentWillUpdate() {
+//        console.log( "componentWillUpdate()" );
+//        this.readFromDB();
+//    } // componentWillUpdate()
 
     readFromDB() {
         BooksAPI.getAll().then( (bookSet) => {bookSet.forEach( 
             (bookSpec) => {
+                const id = bookSpec.id;
                 const title = bookSpec.title;
                 const authors = bookSpec.authors;
                 const coverImageURL = bookSpec.imageLinks.smallThumbnail;
-                const when = this.when.labelToObject( bookSpec.shelf );
+                const when = this.when.shelfNameToObject( bookSpec.shelf );
 
-                const spec = new BookSpecification( coverImageURL, title, authors, when );
+                const spec = new BookSpecification( id, coverImageURL, title, authors, when );
 
                 this.addBook( spec );
             }
@@ -40,15 +46,34 @@ class BooksApp extends React.Component {
 
   addBook = (bookSpecification) => {
       this.setState( (previousState) => {
-          bookSpecification.id = previousState.books.length;
+          bookSpecification.index = previousState.books.length;
           return {books: [...previousState.books, bookSpecification]};
       });
   }; // addBook()
 
 
-  moveBook = (id, destination) => {
+  moveBook = (index, destination) => {
+      const id = this.state.books[index].id;
+      const title = this.state.books[index].title;
+      const authors = this.state.books[index].authors;
+      const coverImageURL = this.state.books[index].coverImageURL;
+      const when = this.state.books[index].when;
+
+      const dbRecord = {
+          id: id,
+          index: index,
+          title: title,
+          authors: authors,
+          imageLinks: {smallThumbnail: coverImageURL},
+          when: when
+      };
+
+      const shelf = destination.shelfName;
+
+      BooksAPI.update( dbRecord, shelf ).then( (msg) => console.log(msg) );
+
       this.setState( (previousState) => {
-          previousState.books[id].when = destination;
+          previousState.books[index].when = destination;
           return {books: previousState.books};
       } );
   }; // moveBook()

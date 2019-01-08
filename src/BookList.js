@@ -9,13 +9,6 @@ class BookList {
     when = (new When());
     choices = this.when.choices;
 
-/*
-    constructor() {
-        this.initialize();
-        //this.readFromDB();
-    } // constructor()
-*/
-
     get listOfBooks() { return this._listOfBooks; }
 
     get listOfNowBooks() {
@@ -64,13 +57,21 @@ class BookList {
         urlComponents.push( "tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y" );
         urlComponents.push( "&source=gbs_api" );
 
+        // Count number of books
+        let count = 0;
+
         let coverImageURL = urlComponents.join( "" );
         let title = "To Kill a Mockingbird";
         let authors = ["Harper Lee"];
         let when = this.choices.now;
 
+        // Construct an identifier for a book from title and
+        // sequence number
+        let id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
+
         let bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
 
@@ -91,9 +92,11 @@ class BookList {
         title = "Ender's Game";
         authors = ["Orson Scott Card"];
         when = this.choices.now;
+        id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
 
@@ -113,9 +116,11 @@ class BookList {
         title = "1776";
         authors = ["David McCullough"];
         when = this.choices.future;
+        id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
 
@@ -135,9 +140,11 @@ class BookList {
         title = "Harry Potter and the Sorcerer's Stone";
         authors = ["J.K. Rowling"];
         when = this.choices.future;
+        id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
 
@@ -158,9 +165,11 @@ class BookList {
         title = "The Hobbit";
         authors = ["J.R.R. Tolkien"];
         when = this.choices.past;
+        id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
 
@@ -181,9 +190,11 @@ class BookList {
         title = "Oh, the Places You'll Go!";
         authors = ["Seuss"];
         when = this.choices.past;
+        id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
 
@@ -204,9 +215,11 @@ class BookList {
         title = "The Adventures of Tom Sawyer";
         authors = ["Mark Twain"];
         when = this.choices.past;
+        id = title.replace( / /g, '' ).toLowerCase().substring(0, 10) + count;
+        count = count + 1;
 
         bookSpecification = new BookSpecification(
-            coverImageURL, title, authors, when );
+            id, coverImageURL, title, authors, when );
 
         this.addBook( bookSpecification );
     } // initialize()
@@ -214,12 +227,13 @@ class BookList {
     readFromDB() {
         BooksAPI.getAll().then( (bookSet) => {bookSet.forEach( 
             (bookSpec) => {
+                const id = bookSpec.id;
                 const title = bookSpec.title;
                 const authors = bookSpec.authors;
                 const coverImageURL = bookSpec.imageLinks.smallThumbnail;
                 const when = this.when.labelToObject( bookSpec.shelf );
 
-                const spec = new BookSpecification( coverImageURL, title, authors, when );
+                const spec = new BookSpecification( id, coverImageURL, title, authors, when );
 
                 this.addBook( spec );
             }

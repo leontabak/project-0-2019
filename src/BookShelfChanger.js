@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import When from './When';
 
 class BookShelfChanger extends Component {
+    choices = (new When()).choices;
 
     respond = (event) => {
-        const id = this.props.id;
+        const index = this.props.index;
         const moveBook = this.props.moveBook;
+        const choices = this.choices;
 
-        const choices = (new When()).choices;
         const code = event.target.value;
 
         let destination = this.props.when;
@@ -22,12 +23,12 @@ class BookShelfChanger extends Component {
             destination = choices.future;
         } // else if
 
-        moveBook( id, destination );
+        moveBook( index, destination );
     };
 
     render() {
 
-        const choices = (new When()).choices;
+        const choices = this.choices;
 
         return (
         <div className="book-shelf-changer">

@@ -53,8 +53,8 @@ body, .app {
 
 .open-search {
   position: fixed;
-  right: 25px;
-  bottom: 25px;
+  right: 60px;
+  bottom: 144px;
 }
 
 .open-search button {
