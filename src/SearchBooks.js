@@ -2,19 +2,68 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
+import SearchResults from './SearchResults';
+import When from './When';
+import BookSpecification from './BookSpecification';
 
 class SearchBooks extends Component {
     state = {
-        query: ''
+        query: '',
+        selectedBooks: []
     }; // state
+
+    when = new When();
+
+    results = [];
 
     search = (event) => {
         const term = "" + event.target.value;
         if( term.length > 0 ) {
         BooksAPI.search( term ).then(
-            (bookSet) => { bookSet.forEach((book) => {console.log(book.title)})} );
+            this.createResultList.bind(this) );
         } // if
     };
+
+    createResultList( bookSet ) {
+        if(bookSet.error === undefined) {
+            this.results.splice( 0, this.results.length );
+            bookSet.forEach(
+                (book) => {
+                    const spec = this.makeBookSpecification(book);
+                    spec.id = this.results.length;
+                    //console.log( spec.title );
+                    this.results.push( spec );
+                } // body of arrow function
+            ); // forEach
+            this.setState( {selectedBooks: this.results} );
+            //this.results.forEach( (b) => {console.log(b.title)} );
+        } // if
+    } // createResultList()
+
+    makeBookSpecification( dbRecord ) {
+        const title = dbRecord.title;
+
+        let authors = dbRecord.authors;
+        if( authors === undefined ) {
+            authors = [ "Author unknown" ];
+        } // if
+
+        let coverImageURL = undefined;
+        if( dbRecord.imageLinks !== undefined ) {
+            coverImageURL = dbRecord.imageLinks.smallThumbnail;
+        } // if
+        if( coverImageURL === undefined ) {
+            coverImageURL = "http://www.eonsahead.com/images/charles-river-128x193.jpg";
+        } // if
+
+        const when = this.when.possible;
+
+        //console.log( title );
+
+        const spec = new BookSpecification( coverImageURL, title, authors, when );
+
+        return spec;
+    } // makeSpecification()
 
     render() {
         return (
@@ -44,12 +93,8 @@ class SearchBooks extends Component {
 
               </div>
             </div>
-            <div className="search-books-results">
-              <ol className="books-grid">
-              </ol>
-            </div>
+            <SearchResults books={this.state.selectedBooks} />
           </div>
-
         ); // return
     } // render()
 } // SearchBooks

@@ -6,6 +6,7 @@ class When {
         this._now = {code: 1, label: "Currently Reading"};
         this._future = {code: 2, label: "Want to Read"};
         this._never = {code: 3, label: "None"};
+        this._possible = {code: 4, label: "Considering"};
     } // constructor()
 
     labelToObject( label ) {
@@ -34,13 +35,15 @@ class When {
     get now() { return this._now; }
     get future() { return this._future; }
     get never() {return this._never; }
+    get possible() {return this._possible; }
 
     get choices() {
         return {
             past: this._past,
             now: this._now,
             future: this._future,
-            never: this._never
+            never: this._never,
+            possible: this._possible
         } // return
     }
 

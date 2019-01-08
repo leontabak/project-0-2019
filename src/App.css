@@ -29,6 +29,10 @@ body, .app {
   flex: 1;
 }
 
+.list-results {
+  margin-top: 60px;
+}
+
 .bookshelf {
   padding: 0 10px 20px;
 }
