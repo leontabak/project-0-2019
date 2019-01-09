@@ -1,12 +1,27 @@
 
+/**
+ @description Render a field in which to enter a query
+     and render a list of books that search returns.
+ @param { props }
+ @return specification of page component in JSX
+
+ @author Leon Tabak
+ @version 09 January 2019
+*/
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import SearchResults from './SearchResults';
 import When from './When';
 import BookSpecification from './BookSpecification';
+import PropTypes from 'prop-types';
 
 class SearchBooks extends Component {
+    static propTypes = {
+        readFromDB: PropTypes.func
+    }
+
     state = {
         query: '',
         selectedBooks: []
@@ -44,6 +59,8 @@ class SearchBooks extends Component {
 
         let authors = dbRecord.authors;
         if( authors === undefined ) {
+            // default in case names of authors are
+            // not found in database record
             authors = [ "Author unknown" ];
         } // if
 
@@ -52,6 +69,8 @@ class SearchBooks extends Component {
             coverImageURL = dbRecord.imageLinks.smallThumbnail;
         } // if
         if( coverImageURL === undefined ) {
+            // default image to use in case no image of book's cover
+            // is available
             coverImageURL = "http://www.eonsahead.com/images/charles-river-128x193.jpg";
         } // if
 
@@ -80,7 +99,8 @@ class SearchBooks extends Component {
 
         const shelf = destination.shelfName;
 
-        BooksAPI.update( dbRecord, shelf ).then( (msg) => console.log(msg) );
+        //BooksAPI.update( dbRecord, shelf ).then( (msg) => console.log(msg) );
+        BooksAPI.update( dbRecord, shelf );
     } // moveBook()
 
     render() {
@@ -88,30 +108,48 @@ class SearchBooks extends Component {
           <div className="search-books">
             <div className="search-books-bar">
 
-              <Link to="/" className="close-search">Close</Link>
+              <Link to="/"
+                  className="close-search"
+                  onClick={this.props.readFromDB}>
+                      Close
+              </Link>
 
               <div className="search-books-input-wrapper">
                 {/*
-                  NOTES: The search from BooksAPI is limited to a 
-                  particular set of search terms.
-
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method 
-                  DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every 
-                  search is limited by search terms.
+                  SEARCH TERMS
+                    Android / Art / Artificial Intelligence / Astronomy /
+                    Austen / Baseball / Basketball / Bhagat /
+                    Biography / Brief / Business / Camus /
+                    Cervantes / Christie / Classics / Comics /
+                    Cook / Cricket / Cycling / Desai /
+                    Design / Development / Digital Marketing / Drama /
+                    Drawing / Dumas / Education / Everything /
+                    Fantasy / Film / Finance / First /
+                    Fitness / Football / Future / Games /
+                    Gandhi / Homer / Horror / Hugo /
+                    Ibsen / Journey / Kafka / King /
+                    Lahiri / Larsson / Learn / Literary Fiction /
+                    Make / Manage / Marquez / Money /
+                    Mystery / Negotiate / Painting / Philosophy /
+                    Photography / Poetry / Production / Programming /
+                    React / Redux / River / Robotics /
+                    Rowling / Satire / Science Fiction / Shakespeare /
+                    Singh / Swimming / Tale / Thrun /
+                    Time / Tolstoy / Travel / Ultimate /
+                    Virtual Reality / Web Development / iOS /
                 */}
+
                 <input
                       type="text"
                       value={this.query}
-                      onChange={this.search} 
+                      onChange={this.search}
                       placeholder="Search by title or author"/>
 
               </div>
             </div>
-            <SearchResults books={this.state.selectedBooks} moveBook={this.moveBook.bind(this)}/>
+            <SearchResults
+                books={this.state.selectedBooks}
+                moveBook={this.moveBook.bind(this)}/>
           </div>
         ); // return
     } // render()

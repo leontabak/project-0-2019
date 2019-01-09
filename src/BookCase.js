@@ -1,40 +1,47 @@
 
-import React, { Component } from 'react';
+/**
+  @description Render a 3 bookshelves.
+  @param { props }
+  @return specification of page component in JSX
+
+  @author Leon Tabak
+  @version 09 January 2019
+*/
+
+import React from 'react';
 import BookShelf from './BookShelf';
 import When from './When';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-class BookCase extends Component {
+function BookCase( props ) {
 
-    choices = (new When()).choices;
+    BookCase.propTypes = {
+        books: PropTypes.arrayOf( PropTypes.object ),
+        moveBook: PropTypes.func
+    }
 
-    listOfNowBooks( allBooks ) {
-        const choices = this.choices;
-        return allBooks.filter( (book) =>
+    const choices = (new When()).choices;
+
+    const listOfNowBooks = ( allBooks ) =>
+        allBooks.filter( (book) =>
             (book.when.code === choices.now.code) );
-    } // listOfNowBooks()
 
-    listOfPastBooks( allBooks ) {
-        const choices = this.choices;
-        return allBooks.filter( (book) =>
+    const listOfPastBooks = ( allBooks ) =>
+        allBooks.filter( (book) =>
             (book.when.code === choices.past.code) );
-    } // listOfPastBooks()
 
-    listOfFutureBooks( allBooks ) {
-        const choices = this.choices;
-        return allBooks.filter( (book) =>
+    const listOfFutureBooks = ( allBooks ) =>
+        allBooks.filter( (book) =>
             (book.when.code === choices.future.code) );
-    } // listOfFutureBooks()
 
-    render() {
+    const { books, moveBook }  = props;
 
-        const allBooks = this.props.books;
-        const present = this.listOfNowBooks( allBooks );
-        const past = this.listOfPastBooks( allBooks );
-        const future = this.listOfFutureBooks( allBooks );
-        const choices = this.choices;
+    const present = listOfNowBooks( books );
+    const past = listOfPastBooks( books );
+    const future = listOfFutureBooks( books );
 
-        return ( 
+    return (
         <div className="list-books">
             <div className="list-books-title">
                 <h1>MyReads</h1>
@@ -45,25 +52,28 @@ class BookCase extends Component {
                     <BookShelf
                         books={present}
                         when={choices.now}
-                        moveBook={this.props.moveBook}/>
+                        moveBook={moveBook}/>
                     <BookShelf
                         books={future}
                         when={choices.future}
-                        moveBook={this.props.moveBook}/>
+                        moveBook={moveBook}/>
                     <BookShelf
                         books={past}
                         when={choices.past}
-                        moveBook={this.props.moveBook}/>
+                        moveBook={moveBook}/>
                 </div>
             </div>
 
-            {/*<div className="open-search">*/}
             <div className="open-search">
-                <Link to='/search' className='open-search-link'>Add a book</Link>
+                <Link
+                    to='/search'
+                    className='open-search-link'>
+                        Add a book
+                </Link>
             </div>
 
         </div>
-    )} // render()
+    );//} // render()
 } // BookCase
 
 export default BookCase

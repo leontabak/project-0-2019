@@ -1,4 +1,11 @@
 
+/**
+    @description Code used during development but not called
+        in released version of product.
+    @author Leon Tabak
+    @version 09 January 2019
+*/
+
 import BookSpecification from './BookSpecification';
 import When from './When.js';
 import * as BooksAPI from './BooksAPI';
@@ -32,15 +39,7 @@ class BookList {
 
     addBook( bookSpecification ) {
         bookSpecification.id = this._listOfBooks.length;
-
-        //console.log( "adding " + bookSpecification.title );
-        //console.log( bookSpecification.authors );
-        //console.log( bookSpecification.when.label );
-        //console.log( bookSpecification.id );
-
-        //console.log( "length before adding: " + this._listOfBooks.length );
         this._listOfBooks.push( bookSpecification );
-        //console.log( "length after adding: " + this._listOfBooks.length );
     } // addBook()
 
     initialize() {
@@ -149,7 +148,7 @@ class BookList {
         this.addBook( bookSpecification );
 
         /* book #4 */
-        urlComponents = []; 
+        urlComponents = [];
         urlComponents.push( "http://books.google.com/books/content" );
         urlComponents.push( "?id=pD6arNyKyi8C" );
         urlComponents.push( "&printsec=frontcover" );
@@ -199,7 +198,7 @@ class BookList {
         this.addBook( bookSpecification );
 
         /* book #6 */
-        urlComponents = []; 
+        urlComponents = [];
         urlComponents.push( "http://books.google.com/books/content" );
         urlComponents.push( "?id=32haAAAAMAAJ" );
         urlComponents.push( "&printsec=frontcover" );
@@ -225,7 +224,7 @@ class BookList {
     } // initialize()
 
     readFromDB() {
-        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach( 
+        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach(
             (bookSpec) => {
                 const id = bookSpec.id;
                 const title = bookSpec.title;
@@ -233,7 +232,8 @@ class BookList {
                 const coverImageURL = bookSpec.imageLinks.smallThumbnail;
                 const when = this.when.labelToObject( bookSpec.shelf );
 
-                const spec = new BookSpecification( id, coverImageURL, title, authors, when );
+                const spec = new BookSpecification( id, coverImageURL,
+                    title, authors, when );
 
                 this.addBook( spec );
             }
@@ -241,10 +241,11 @@ class BookList {
     } // readFromDB()
 
     writeToDB() {
-        this.listOfBooks.forEach( 
+        this.listOfBooks.forEach(
             (bookSpec) => {
-                console.log( bookSpec.title ); 
-                BooksAPI.update( bookSpec, bookSpec.when.label ).then( () => {console.log("posted");});
+                console.log( bookSpec.title );
+                BooksAPI.update( bookSpec, bookSpec.when.label ).then(
+                    () => {console.log("posted");});
             } );
     } // writeToDB()
 

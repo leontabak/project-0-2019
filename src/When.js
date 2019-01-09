@@ -8,7 +8,7 @@ class When {
             shelfName: "read"};
 
         this._now = {
-            code: 1, 
+            code: 1,
             label: "Currently Reading",
             shelfName: "currentlyReading"};
 

@@ -1,18 +1,35 @@
 
-import React, { Component } from 'react';
+/**
+ @description Render a drop-down menu to select shelf
+     on which to place a book.
+ @param { props }
+ @return specification of page component in JSX
+
+ @author Leon Tabak
+ @version 09 January 2019
+*/
+
+import React from 'react';
 import When from './When';
+import PropTypes from 'prop-types';
 
-class BookShelfChanger extends Component {
-    choices = (new When()).choices;
+function BookShelfChanger(props) {
 
-    respond = (event) => {
-        const index = this.props.index;
-        const moveBook = this.props.moveBook;
-        const choices = this.choices;
+    BookShelfChanger.propTypes = {
+        index: PropTypes.number,
+        moveBook: PropTypes.func,
+        when: PropTypes.object
+    };
+
+    const choices = (new When()).choices;
+
+    const respond = (event) => {
+        const index = props.index;
+        const moveBook = props.moveBook;
 
         const code = event.target.value;
 
-        let destination = this.props.when;
+        let destination = props.when;
         if( code === String(choices.now.code) ) {
             destination = choices.now;
         } // if
@@ -22,17 +39,16 @@ class BookShelfChanger extends Component {
         else if( code === String(choices.future.code) ) {
             destination = choices.future;
         } // else if
+        else if( code === String(choices.never.code) ) {
+            destination = choices.never;
+        } // else if
 
         moveBook( index, destination );
     };
 
-    render() {
-
-        const choices = this.choices;
-
-        return (
+    return (
         <div className="book-shelf-changer">
-            <select value={this.props.when.code} onChange={this.respond}>
+            <select value={props.when.code} onChange={respond}>
                 <option value="move" disabled>Move to...</option>
                 <option value={choices.now.code}>
                     {choices.now.label}
@@ -48,7 +64,7 @@ class BookShelfChanger extends Component {
                 </option>
             </select>
         </div> );
-    } // render()
+
 } // BookShelfChanger
 
 export default BookShelfChanger;

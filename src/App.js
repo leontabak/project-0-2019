@@ -1,4 +1,10 @@
 
+/**
+ @description Search for books, organize books, and display books.
+ @author Leon Tabak
+ @version 09 January 2019
+*/
+
 import React from 'react';
 import './App.css';
 import When from './When';
@@ -16,20 +22,11 @@ class BooksApp extends React.Component {
     when = new When();
 
     componentDidMount() {
-        //const allBooks = new BookList();
-        //allBooks.initialize();
-        //allBooks.listOfBooks.forEach( (book) => {this.addBook( book );});
-        console.log( "componentDidMount()" );
         this.readFromDB();
     } // componentDidMount()
 
-//    componentWillUpdate() {
-//        console.log( "componentWillUpdate()" );
-//        this.readFromDB();
-//    } // componentWillUpdate()
-
     readFromDB() {
-        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach( 
+        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach(
             (bookSpec) => {
                 const id = bookSpec.id;
                 const title = bookSpec.title;
@@ -37,18 +34,28 @@ class BooksApp extends React.Component {
                 const coverImageURL = bookSpec.imageLinks.smallThumbnail;
                 const when = this.when.shelfNameToObject( bookSpec.shelf );
 
-                const spec = new BookSpecification( id, coverImageURL, title, authors, when );
+                const spec =
+                    new BookSpecification( id, coverImageURL, title, authors, when );
 
+                spec.index = this.state.books.length;
                 this.addBook( spec );
             }
         );});
+
     } // readFromDB()
 
+  isDuplicate( bookSpec ) {
+      return this.state.books.filter( (spec) => (spec.id === bookSpec.id)).length > 0 ;
+  } // isDuplicate()
+
   addBook = (bookSpecification) => {
-      this.setState( (previousState) => {
-          bookSpecification.index = previousState.books.length;
-          return {books: [...previousState.books, bookSpecification]};
-      });
+      if( !this.isDuplicate( bookSpecification ) ) {
+          this.setState( (previousState) => {
+              bookSpecification.index = previousState.books.length;
+              const nextState = {books: [...previousState.books, bookSpecification]};
+              return nextState;
+          }); this.setState()
+      } // if
   }; // addBook()
 
 
@@ -70,7 +77,8 @@ class BooksApp extends React.Component {
 
       const shelf = destination.shelfName;
 
-      BooksAPI.update( dbRecord, shelf ).then( (msg) => console.log(msg) );
+      //BooksAPI.update( dbRecord, shelf ).then( (msg) => console.log(msg) );
+      BooksAPI.update( dbRecord, shelf );
 
       this.setState( (previousState) => {
           previousState.books[index].when = destination;
@@ -89,7 +97,7 @@ class BooksApp extends React.Component {
                   <BookCase books={this.state.books} moveBook={this.moveBook}/>)} />
             <Route path="/search"
                 render={() => (
-                  <SearchBooks />
+                  <SearchBooks readFromDB={this.readFromDB.bind(this)}/>
                 )} />
         </div>
 
