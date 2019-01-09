@@ -7,6 +7,25 @@
 I used the starter template for the final assessment project for
 Udacity's React Fundamentals course to create my project. 
 
+## How to use this app
+
+The app displays a main page when launched.
+A reader may move back and forth between the main page
+(click on plus sign in green circle near right edge of
+page) and a search page (click on left arrow in upper
+left corner of page).
+
+On the search page, enter text in the field at the
+top of the page to query a database and display the
+result of the query (a set of books).
+
+Recognized search terms are in a comment in SearchBooks.js.
+
+Point to the downward pointing triangle in the small green
+circle at the lower right corner of a book. Select a destination
+of a book. This can be done on the main page or the search page.
+
+
 ## Overview
 
 Some records in the database may not include names of authors
