@@ -79,6 +79,10 @@ class SearchBooks extends Component {
             BooksAPI.search( term ).then(
                 this.createResultList.bind(this) );
         } // if
+        else {
+            this.results.splice( 0, this.results.length );
+            this.setState( {selectedBooks: this.results} );
+        } // else
     }; // search()
 
     createResultList( bookSet ) {
