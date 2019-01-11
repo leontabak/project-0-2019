@@ -16,6 +16,7 @@ import SearchResults from './SearchResults';
 import When from './When';
 import BookSpecification from './BookSpecification';
 import PropTypes from 'prop-types';
+import DebounceInput from 'react-debounce-input';
 
 class SearchBooks extends Component {
     static propTypes = {
@@ -184,7 +185,8 @@ class SearchBooks extends Component {
                     Virtual Reality / Web Development / iOS /
                 */}
 
-                <input
+                <DebounceInput
+                      debounceTimeout={200}
                       type="text"
                       value={this.query}
                       onChange={this.search}
