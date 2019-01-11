@@ -33,14 +33,12 @@ class SearchBooks extends Component {
 
     search = (event) => {
         const term = "" + event.target.value;
-        if( term.length > 0 ) {
         BooksAPI.search( term ).then(
             this.createResultList.bind(this) );
-        } // if
-    };
+    }; // search()
 
     createResultList( bookSet ) {
-        if(bookSet.error === undefined) {
+        if(bookSet !== undefined && bookSet.error === undefined) {
             this.results.splice( 0, this.results.length );
             bookSet.forEach(
                 (book) => {
@@ -51,6 +49,10 @@ class SearchBooks extends Component {
             ); // forEach
             this.setState( {selectedBooks: this.results} );
         } // if
+        else {
+            this.results.splice( 0, this.results.length );
+            this.setState( {selectedBooks: this.results} );
+        } // else
     } // createResultList()
 
     makeBookSpecification( dbRecord ) {
