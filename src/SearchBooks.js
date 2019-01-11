@@ -24,12 +24,55 @@ class SearchBooks extends Component {
 
     state = {
         query: '',
-        selectedBooks: []
+        selectedBooks: [],
+        booksOnShelves: []
     }; // state
 
     when = new When();
 
     results = [];
+
+    booksOnShelves = () => {
+        const alreadySelectedBooks = [];
+
+        BooksAPI.getAll().then( (bookSet) => {bookSet.forEach(
+            (bookSpec) => {
+                const id = bookSpec.id;
+                const title = bookSpec.title;
+                const authors = bookSpec.authors;
+                const coverImageURL = bookSpec.imageLinks.smallThumbnail;
+                const when = this.when.shelfNameToObject( bookSpec.shelf );
+
+                const spec =
+                    new BookSpecification( id, coverImageURL, title, authors, when );
+
+                spec.index = alreadySelectedBooks.length;
+
+                console.log( title + ":" + when.label );
+
+                alreadySelectedBooks.push( spec );
+            }
+        );});
+
+        return alreadySelectedBooks;
+    } // booksOnShelves()
+
+    componentDidMount() {
+        const alreadySelectedBooks = this.booksOnShelves();
+        this.setState( {booksOnShelves: alreadySelectedBooks} );
+    } // componentDidMount()
+
+    getShelf = (id) => {
+        const matches = this.state.booksOnShelves.filter(
+            (book) => (book.id === id) );
+
+        if( matches !== undefined && matches.length > 0 ) {
+            return matches[0].when;
+        } // if
+        else {
+            return this.when.never;
+        } // else
+    }; // getShelf()
 
     search = (event) => {
         const term = "" + event.target.value;
@@ -76,7 +119,7 @@ class SearchBooks extends Component {
             coverImageURL = "http://www.eonsahead.com/images/charles-river-128x193.jpg";
         } // if
 
-        const when = this.when.possible;
+        const when = this.getShelf(id); //this.when.shelfNameToObject( dbRecord.shelf );
 
         const spec = new BookSpecification( id, coverImageURL, title, authors, when );
 
