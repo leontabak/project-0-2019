@@ -48,8 +48,6 @@ class SearchBooks extends Component {
 
                 spec.index = alreadySelectedBooks.length;
 
-                console.log( title + ":" + when.label );
-
                 alreadySelectedBooks.push( spec );
             }
         );});
@@ -76,8 +74,10 @@ class SearchBooks extends Component {
 
     search = (event) => {
         const term = "" + event.target.value;
-        BooksAPI.search( term ).then(
-            this.createResultList.bind(this) );
+        if( term.length > 0 ) {
+            BooksAPI.search( term ).then(
+                this.createResultList.bind(this) );
+        } // if
     }; // search()
 
     createResultList( bookSet ) {
